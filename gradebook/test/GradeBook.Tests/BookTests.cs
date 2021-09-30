@@ -3,6 +3,21 @@ using Xunit;
 
 namespace GradeBook.Tests
 {
+    public class ValueTypeTests
+    {
+        [Fact]
+        public void StringBehavesAsValueType()
+        {
+            string name = "scott";
+            string upper = MakeUppercase(name);
+            Assert.Equal("SCOTT",upper);            
+        }
+
+        private string MakeUppercase(string name)
+        {
+            return name.ToUpper();
+        }
+    }
     public class BookTests2
     {
         [Fact]
