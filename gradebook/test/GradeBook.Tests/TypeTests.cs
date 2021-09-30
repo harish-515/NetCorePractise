@@ -3,8 +3,49 @@ using Xunit;
 
 namespace GradeBook.Tests
 {
+
+    public delegate string WriteLogDelegate(string msg);
     public class TypeTests
     {
+        int count = 0;
+        [Fact]
+        public void WriteLogDelegateMulticastTest()
+        {
+
+            WriteLogDelegate log = new WriteLogDelegate(ReturnMessageMulticast);
+
+            log += ReturnMessageMulticast;
+
+            var result = log("Hello");
+
+            Assert.Equal(2,count);
+        }
+
+        [Fact]
+        public void WriteLogDelegateTest()
+        {
+            WriteLogDelegate log;
+            
+            //log = new WriteLogDelegate(ReturnMessage);
+
+            log = ReturnMessage;
+
+            var result = log("Hello");
+
+            Assert.Equal("Hello",result);
+        }
+
+        string ReturnMessage(string message)
+        {
+            return message;
+        }
+
+        string ReturnMessageMulticast(string message)
+        {
+            count++;
+            return message;
+        }
+
         [Fact]
         public void IntReturnValueTypeTests()
         {
