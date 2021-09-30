@@ -2,26 +2,10 @@ using System;
 using Xunit;
 
 namespace GradeBook.Tests
-{
-    public class ValueTypeTests
+{    public class BookTests
     {
         [Fact]
-        public void StringBehavesAsValueType()
-        {
-            string name = "scott";
-            string upper = MakeUppercase(name);
-            Assert.Equal("SCOTT",upper);            
-        }
-
-        private string MakeUppercase(string name)
-        {
-            return name.ToUpper();
-        }
-    }
-    public class BookTests2
-    {
-        [Fact]
-        public void Test1()
+        public void BookCalulatesAnAverageGrade()
         {
             //arrage
             var book = new Book("");
@@ -37,5 +21,6 @@ namespace GradeBook.Tests
             Assert.Equal(90.5,result.High);
             Assert.Equal(77.3,result.Low);
         }
+
     }
 }
