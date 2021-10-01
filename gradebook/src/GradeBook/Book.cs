@@ -1,12 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace GradeBook
 {
-    public class Book
-    {
-        private List<double> grades;
+    public delegate void GradeAddedDelegate(object sender,EventArgs args);
+    
+    public class NamedObject {
         private string name;
+
+        public NamedObject(string name)
+        {
+            Name = name;
+        }
+
         public string Name
         {
             get 
@@ -24,9 +31,35 @@ namespace GradeBook
                 }
             }
         }
+    }
+    
+    public interface IBook
+    {
+        void AddGrade(double grade);
+        Statistics GetStatistics();
+        string Name {get;}
+        event GradeAddedDelegate GradeAdded;
+    }
+    
+    public abstract class Book : NamedObject,IBook
+    {
+        public Book(string name) : base(name)
+        {
+        }
 
-        public Book(string name){
-            Name = name;
+        public abstract event GradeAddedDelegate GradeAdded;
+
+        public abstract void AddGrade(double grade);
+
+        public abstract Statistics GetStatistics();
+
+    }
+
+    public class InMemoryBook : Book
+    {
+        private List<double> grades;
+        public InMemoryBook(string name) : base(name)
+        {
             this.grades = new List<double>();
         }
 
@@ -47,10 +80,12 @@ namespace GradeBook
                     break;            }
         }
 
-        public void AddGrade(double grade){
+        public override void AddGrade(double grade){
             if(grade >= 0 && grade <= 100)
             {
                 this.grades.Add(grade);
+                if(GradeAdded != null)
+                    GradeAdded(this,new EventArgs());
             }
             else
             {
@@ -58,40 +93,51 @@ namespace GradeBook
             }
         }
 
-        public Statistics GetStatistics()
+        public override event GradeAddedDelegate GradeAdded;
+
+        public override Statistics GetStatistics()
         {
-            var highGrade = double.MinValue;
-            var lowGrade = double.MaxValue;
-            var gradesTotal = 0.0;
-
-            foreach(var grade in this.grades){
-                lowGrade = Math.Min(grade,lowGrade);
-                highGrade = Math.Max(grade,highGrade);
-                gradesTotal += grade;
-            }
-
-            var avgGrade = gradesTotal / this.grades.Count;
-            var letterGrade = 'F';
-            switch(avgGrade)
+            var results = new Statistics();
+            for(var index =0;index < grades.Count;index++)
             {
-                case var d when d > 90.0 :
-                    letterGrade = 'A';
-                    break;
-                case var d when d > 80.0 :
-                    letterGrade = 'B';
-                    break;
-                case var d when d > 70.0 :
-                    letterGrade = 'C';
-                    break;
-                case var d when d > 60.0 :
-                    letterGrade = 'D';
-                    break;
-                default:
-                    letterGrade = 'F';
-                    break;                                                                                                  
-            }    
+                results.Add(grades[index]);
+            }
+            return results;
+        }
+    }
 
-            return new Statistics(avgGrade,highGrade,lowGrade,letterGrade);
+    public class DiskBook : Book
+    {
+        public DiskBook(string name) : base(name)
+        {
+
+        }
+
+        public override event GradeAddedDelegate GradeAdded;
+
+        public override void AddGrade(double grade)
+        {
+            using(var writter = File.AppendText($"{Name}.txt"))
+            {
+                writter.WriteLine(grade);
+                if(GradeAdded!=null)
+                {
+                    GradeAdded(this,new EventArgs());
+                }
+            }
+        }
+
+        public override Statistics GetStatistics()
+        {
+            var results = new Statistics();
+            using(var reader  = File.OpenText($"{Name}.txt"))
+            {
+                while(!reader.EndOfStream)
+                {
+                    results.Add(Double.Parse(reader.ReadLine()));
+                }
+            }
+            return results;
         }
     }
 }
