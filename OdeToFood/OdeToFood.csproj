@@ -6,7 +6,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="OdeToFood.Data\OdeToFood.Data.csproj" />
-  </ItemGroup>
+<ItemGroup>
+  <ProjectReference Include="..\OdeToFood.Data\OdeToFood.Data.csproj">
+    <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+  </ProjectReference>
+</ItemGroup>
 </Project>
