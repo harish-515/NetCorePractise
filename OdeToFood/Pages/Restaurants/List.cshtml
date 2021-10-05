@@ -5,4 +5,37 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<h3>@Model.Message</h3>
+<form method="GET">
+    <div class="form-group">
+        <div class="input-group">
+            <input type="search" class="form-control" asp-for="SearchText"/>
+            <span class="input-group-btn">
+                <button class="btn btn-success">
+                    <i class="fal fa-search fa-lg"></i>
+                </button>
+            </span>
+        </div>
+    </div>
+</form>
+
+<table class="table">
+    @foreach (var restaurant in Model.Restaurants)
+    {
+        <tr>
+            <td>@restaurant.Name</td>
+            <td>@restaurant.Location</td>
+            <td>@restaurant.Cuisine</td>
+            <td>
+                <a class="btn" asp-page="./Details" asp-route-restaurantId="@restaurant.Id">
+                    <i class="fas fa-info-circle"></i>
+                </a>
+                <a class="btn" asp-page="./Edit" asp-route-restaurantId="@restaurant.Id">
+                    <i class="fal fa-edit"></i>
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+
+
+<a class="btn btn-primary" asp-page="./Edit">Add New</a>
