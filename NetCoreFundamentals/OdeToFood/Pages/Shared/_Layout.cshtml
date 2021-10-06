@@ -40,9 +40,12 @@
     </div>
 
     <footer class="border-top footer text-muted">
+        @RenderSection("Footer", required: false)
+        <vc:restaurant-count></vc:restaurant-count>
         <div class="container">
             &copy; 2021 - OdeToFood - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
+        <img src="/seesaw-logo.png" />
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

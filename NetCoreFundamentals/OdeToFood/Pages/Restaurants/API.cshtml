@@ -1,0 +1,42 @@
+﻿@page
+@model APIModel
+@{
+}
+
+
+<table class="table" id="restaurants">
+
+</table>
+
+
+@section Scripts{
+
+    <environment include="Development">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.css" />
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.js"></script>
+    </environment>
+
+
+    <environment exclude="Development">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.css" />
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.js"></script>
+    </environment>
+
+    <script>$(function () {
+    var Cuisines = ["None", "Mexican", "Italian", "Indian"];
+
+            $.ajax("/api/Restaurants/", { method: "get" })
+                .then(function (response) {
+                    $("#restaurants").dataTable({
+                        data: response,
+                        columns: [{ "data": "name" },
+                            { "data": "location" },
+                            {
+                                "data": "cuisine", "render": function (data) {
+                                    return Cuisines[data];
+                                }
+                            }]
+                    })
+                });
+        });</script>
+}
