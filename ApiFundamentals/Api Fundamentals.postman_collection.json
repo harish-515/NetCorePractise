@@ -1,0 +1,493 @@
+{
+	"info": {
+		"_postman_id": "4df2d5ce-0e21-47e8-bd57-628deae1e82e",
+		"name": "Api Fundamentals",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Functional APIs",
+			"item": [
+				{
+					"name": "Reload Config API",
+					"request": {
+						"method": "OPTIONS",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6600/api/operations/reloadconfig",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"operations",
+								"reloadconfig"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Resource APIs",
+			"item": [
+				{
+					"name": "Get Camp - Talks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6600/api/camps/ATL2018/Talks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps",
+								"ATL2018",
+								"Talks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Camp - Talk By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6600/api/camps/ATL2018/Talks/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps",
+								"ATL2018",
+								"Talks",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Talk of a Camp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Testing APIs made easy - II\",\r\n    \"abstract\": \"Testing is simple.\",\r\n    \"level\": 400,\r\n    \"speaker\": {\r\n        \"speakerId\": 2\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6600/api/camps/ATL2018/Talks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps",
+								"ATL2018",
+								"Talks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Talk of a Camp",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"talkid\":4,\r\n    \"title\": \"Deploying APIs made too easy\",\r\n    \"abstract\": \"Deploying of API is as simple as it can get.\",\r\n    \"level\": 100,\r\n    \"speaker\": {\r\n        \"speakerId\": 2\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6600/api/camps/ATL2018/Talks/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps",
+								"ATL2018",
+								"Talks",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Talk of a Camp",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6600/api/camps/ATL2018/Talks/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps",
+								"ATL2018",
+								"Talks",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Camp",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"name\": \"San Dieago Code Camp\",\r\n        \"moniker\": \"SD2019\",\r\n        \"eventDate\": \"2018-05-05T00:00:00\",\r\n        \"length\": 61,\r\n        \"venue\": \"SD Community Collage\",\r\n        \"locationAddress1\": \"Florida\",\r\n        \"locationAddress2\": null,\r\n        \"locationAddress3\": null,\r\n        \"locationCityTown\": null,\r\n        \"locationStateProvince\": null,\r\n        \"locationPostalCode\": \"12345\",\r\n        \"locationCountry\": \"USA\",\r\n        \"talks\": []\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6600/api/camps/SD2019",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps",
+								"SD2019"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Camps - Talks Included",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6600/api/camps?includeTalks=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps"
+							],
+							"query": [
+								{
+									"key": "includeTalks",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Camps - Date Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6600/api/camps/search?theDate=2018-10-18&includeTalks=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps",
+								"search"
+							],
+							"query": [
+								{
+									"key": "theDate",
+									"value": "2018-10-18"
+								},
+								{
+									"key": "includeTalks",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Camps By Moniker",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6600/api/camps/SD2019",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps",
+								"SD2019"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Camp",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6600/api/camps/SD2019",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps",
+								"SD2019"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Camp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"eventDate\": \"2018-05-05T00:00:00\",\r\n        \"length\": 101,\r\n        \"venue\": \"SD Community Collage\",\r\n        \"locationAddress1\": null,\r\n        \"locationAddress2\": null,\r\n        \"locationAddress3\": null,\r\n        \"locationCityTown\": null,\r\n        \"locationStateProvince\": null,\r\n        \"locationPostalCode\": \"12345\",\r\n        \"locationCountry\": null,\r\n        \"talks\": []\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6600/api/camps",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Camp",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6600/api/camps",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API Versioning",
+			"item": [
+				{
+					"name": "Query String Versioning 1.0",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6600/api/camps?api-version=1.0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "1.0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query String Versioning 1.1",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6600/api/camps?api-version=1.1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "1.1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query String Versioning 2.0",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6600/api/camps?api-version=2.0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "2.0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Header Versioning 2.0",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6600/api/camps?api-version=2.0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "2.0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "URL Versioning 3.0",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6600/api/camps?api-version=2.0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6600",
+							"path": [
+								"api",
+								"camps"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "2.0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
