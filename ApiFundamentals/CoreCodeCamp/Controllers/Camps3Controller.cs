@@ -11,16 +11,15 @@ using System.Threading.Tasks;
 
 namespace CoreCodeCamp.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiVersion("1.0")]
-    [ApiVersion("1.1")]
+    [Route("api/v{version:apiVersion}/camps")]
+    [ApiVersion("3.0")]
     [ApiController]
-    public class CampsController : ControllerBase
+    public class Camps3Controller : ControllerBase
     {
         private readonly ICampRepository campRepository;
         private readonly IMapper mapper;
 
-        public CampsController(ICampRepository campRepository,IMapper mapper,LinkGenerator linkGenerator)
+        public Camps3Controller(ICampRepository campRepository,IMapper mapper,LinkGenerator linkGenerator)
         {
             this.campRepository = campRepository;
             this.mapper = mapper;
@@ -30,8 +29,7 @@ namespace CoreCodeCamp.Controllers
         public LinkGenerator LinkGenerator { get; }
 
         [HttpGet]
-        [ApiVersion("1.0")]
-        public async Task<ActionResult<CampModel[]>> Get(bool includeTalks=false)
+        public async Task<IActionResult> Get(bool includeTalks=false)
         {
             try
             {
@@ -40,29 +38,13 @@ namespace CoreCodeCamp.Controllers
                 {
                     return NotFound();
                 }
-                return mapper.Map<CampModel[]>(results);
+                return Ok(new {
+                    count = results.Count(),
+                    results = mapper.Map<CampModel[]>(results),
+                    version = "3.0"
+                });
             }
             catch(Exception)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Error.");
-            }
-        }
-
-
-        [HttpGet]
-        [ApiVersion("1.1")]
-        public async Task<ActionResult<CampModel[]>> Get11(bool includeTalks = true)
-        {
-            try
-            {
-                var results = await this.campRepository.GetAllCampsAsync(includeTalks);
-                if (results == null)
-                {
-                    return NotFound();
-                }
-                return mapper.Map<CampModel[]>(results);
-            }
-            catch (Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Error.");
             }
