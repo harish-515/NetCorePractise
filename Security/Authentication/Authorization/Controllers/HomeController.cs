@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Authorization.CustomPolicyProvider;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ namespace Authorization.Controllers
 {
     public class HomeController : Controller
     {
+
         public IActionResult Index()
         {
             return View();
@@ -23,12 +25,34 @@ namespace Authorization.Controllers
         }
 
         [Authorize(Policy = "Claim.DoB")]
-        public IActionResult SecretWithPolicy()
+        public IActionResult SecretPolicy()
+        {
+            return View("Secret");
+        }
+
+        // role is a legacy approach to authorize .. and its now one of the claimtypes 
+        // now we mostly use policy based authorization
+        [Authorize(Roles = "Admin")] 
+        public IActionResult SecretRole()
         {
             return View("Secret");
         }
 
 
+        [SecurityLevel(5)]
+        public IActionResult SecretSecurityLevel()
+        {
+            return View("Secret");
+        }
+
+
+        [SecurityLevel(10)]
+        public IActionResult SecretHighSecurityLevel()
+        {
+            return View("Secret");
+        }
+
+        [AllowAnonymous]
         public IActionResult Authenticate()
         {
             // Authority -- Trusted parties who can specify information about the user
@@ -45,6 +69,8 @@ namespace Authorization.Controllers
                 new Claim(ClaimTypes.Name,"Bob"),
                 new Claim(ClaimTypes.Email,"Bob@hmail.com"),
                 new Claim(ClaimTypes.DateOfBirth,"10/10/2010"),
+                new Claim(ClaimTypes.Role,"Admin"),
+                new Claim(DynamicPolicies.SecurityLevel,"5"),
                 new Claim("Grandma.Says","Very nice boy")
             };
 
@@ -73,5 +99,25 @@ namespace Authorization.Controllers
 
             return RedirectToAction("Index");
         }
+
+        //method injection
+        public async Task<IActionResult> SomeStuff([FromServices] IAuthorizationService authService)
+        {
+            // some business logic
+            var policyBuilder = new AuthorizationPolicyBuilder();
+            var policy = policyBuilder.RequireClaim("NewClaim").Build();
+
+            // Here we are not authorizing the entire action but a part of it
+            // similarly we can use the same in Views as well 
+            var authResults = await authService.AuthorizeAsync(User, policy);
+
+            if (authResults.Succeeded)
+            {
+                // do some thing authentic
+            }
+
+            return View("Index");
+        }
+
     }
 }

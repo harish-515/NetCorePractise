@@ -1,7 +1,12 @@
 using Authorization.AuthorizationRequirements;
+using Authorization.Controllers;
+using Authorization.CustomPolicyProvider;
+using Authorization.Transformations;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
@@ -42,9 +47,22 @@ namespace Authorization
                 });
             });
 
+            services.AddSingleton<IAuthorizationPolicyProvider, CustomAuthorizationPolicyProvider>();
+            services.AddScoped<IAuthorizationHandler, SecurityLevelRequirmentHandler>();
             services.AddScoped<IAuthorizationHandler, CustomRequireClaimHandler>();
+            services.AddScoped<IAuthorizationHandler, CookieJarAuthorizationHandler>();
+            services.AddScoped<IClaimsTransformation, ClaimTransformtions>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(config => {
+                var defaultAuthBuilder = new AuthorizationPolicyBuilder();
+                var defaultAuthPolicy = defaultAuthBuilder
+                .RequireAuthenticatedUser()
+                .Build();
+
+                // this is the default authorize filter applied globally to 
+                // all controllers without authorize attribute on action / controller
+                // config.Filters.Add(new AuthorizeFilter(defaultAuthPolicy));
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
