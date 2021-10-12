@@ -13,10 +13,12 @@ namespace Client.Controllers
     public class HomeController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _client;
 
         public HomeController(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
+            _client = _httpClientFactory.CreateClient();
         }
 
         public IActionResult Index()
@@ -27,7 +29,14 @@ namespace Client.Controllers
         [Authorize]
         public async Task<IActionResult> Secret()
         {
-            await Task.CompletedTask;
+            var token = await HttpContext.GetTokenAsync("access_token");
+
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+            //var secretResponse = await _client.GetAsync("https://localhost:44382/Secret/Index");
+
+            var apiResponse = await _client.GetAsync("https://localhost:44353/Secret/Index");
+
             return View();
         }
 

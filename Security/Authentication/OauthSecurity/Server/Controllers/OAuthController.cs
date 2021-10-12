@@ -90,5 +90,18 @@ namespace Server.Controllers
             return Redirect(redirect_uri);
         }
 
+        [Authorize]
+        public IActionResult Validate()
+        {
+            if(HttpContext.Request.Query.TryGetValue("access_token",out var accesstoken))
+            {
+                // as within the authorize filter the token is validated
+                // and once validated if we are able to fetch the token 
+                // then we assume that the client has sent us a valid token
+                return Ok();
+            }
+            return BadRequest();
+        }
+
     }
 }
