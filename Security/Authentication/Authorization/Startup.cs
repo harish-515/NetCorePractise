@@ -40,6 +40,9 @@ namespace Authorization
                 //    policyBuilder.RequireClaim(ClaimTypes.DateOfBirth);
                 //});
 
+                config.AddPolicy("Admin", policyBuilder => {
+                    policyBuilder.RequireClaim(ClaimTypes.Role, "Admin");
+                });
 
                 config.AddPolicy("Claim.DOB", policyBuilder =>
                 {
@@ -63,6 +66,20 @@ namespace Authorization
                 // all controllers without authorize attribute on action / controller
                 // config.Filters.Add(new AuthorizeFilter(defaultAuthPolicy));
             });
+
+            // to authorize razor pages we need to add them to the configuration 
+            // as follows
+            services.AddRazorPages()
+                .AddRazorPagesOptions(config => {
+                    config.Conventions.AuthorizePage("/Razor/Secure");
+                    config.Conventions.AuthorizePage("/Razor/Policy","Admin");
+                    // to apply authorization policy on a bunch of pages under a folder
+                    config.Conventions.AuthorizeFolder("/Razor/SecuredPages");
+
+                    // Specify an anonymous page in a secure folder
+                    config.Conventions.AllowAnonymousToPage("/Razor/SecuredPages/Anonymous");
+
+                });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -81,6 +98,7 @@ namespace Authorization
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
             });
         }
     }
