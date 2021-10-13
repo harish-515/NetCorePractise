@@ -45,11 +45,16 @@ namespace Server.Controllers
             return Redirect($"{redirectUri}{query.ToString()}");
         }
 
+
+        // the parameters specified here must be same as that of specified in the 
+        // oauth specification document.
+
         public async Task<IActionResult> Token(
             string grant_type, // flow of access_token request
             string code, // confirmation of the authentication process
             string redirect_uri,
-            string client_id)
+            string client_id,
+            string refresh_token)
         {
             // some mechanism for validating the code
 
@@ -70,7 +75,9 @@ namespace Server.Controllers
                 Constants.Audiance,
                 claims,
                 notBefore: DateTime.Now,
-                expires: DateTime.Now.AddDays(1),
+                expires: grant_type ==  "refresh_token" 
+                    ? DateTime.Now.AddMinutes(5)               // access token fetched using refresh token takes 5 minutes to expire 
+                    : DateTime.Now.AddMilliseconds(1),         // initial access token expires within a millisecond
                 signingCredentials);
 
             var access_token = new JwtSecurityTokenHandler().WriteToken(token);
@@ -79,7 +86,8 @@ namespace Server.Controllers
             {
                 access_token,
                 token_type = "Bearer",
-                raw_claim = "oauthTutorial"
+                raw_claim = "oauthTutorial",
+                refresh_token = "some_value_simulating_the_refresh_token" 
             };
 
             var responseJson = JsonConvert.SerializeObject(responseObject);

@@ -35,6 +35,12 @@ namespace Server
 
                     config.TokenValidationParameters = new TokenValidationParameters()
                     {
+                        // by default a access token had a skew time which is close to 5 min
+                        // so till that time the access token is valid even though the experiry 
+                        // set on the token is lot less than the skew time.
+                        // So, for smaller expirey need to modify the ske time as well.
+
+                        ClockSkew = TimeSpan.Zero, 
                         ValidIssuer = Constants.Issuer,
                         ValidAudience = Constants.Audiance,
                         IssuerSigningKey = key,
