@@ -14,12 +14,24 @@ namespace IdentityServer
         //public static IEnumerable<ApiScope> GetApiScopes => new List<ApiScope> { new ApiScope("ApiOne") }; 
         public static IEnumerable<ApiResource> GetResourceScopes => new List<ApiResource> {
                 new ApiResource("ApiOne"),
-                new ApiResource("ApiTwo")        
+                new ApiResource("ApiTwo",new string[] { "some.api.claim"})  // eventhough this claim is set for apitwo when creating an access token
+                                                                            // the claims of all the relavent scopes are aggregated and will be accessable
+                                                                            // in all the resources 
         };
 
         public static IEnumerable<IdentityResource> GetUserScopes => new List<IdentityResource> { 
             new IdentityResources.OpenId(),
-            new IdentityResources.Profile() 
+            new IdentityResources.Profile(),
+
+            // custom scopes should be added here to make them visible
+            new IdentityResource
+            {
+                Name = "custom.scopes",
+                UserClaims =
+                {
+                    "some.custom.claim"
+                }
+            }
         };
         public static IEnumerable<Client> GetClients => new List<Client> { 
             new Client()
@@ -39,8 +51,15 @@ namespace IdentityServer
                     "ApiOne", 
                     "ApiTwo",
                     IdentityServerConstants.StandardScopes.OpenId,
-                    IdentityServerConstants.StandardScopes.Profile
+                    IdentityServerConstants.StandardScopes.Profile,
+                    "custom.scopes"  // we need to add sustom scope then to the list of scopes that this client can access.
                 },
+
+                // puts all the claims into the ID token
+                //AlwaysIncludeUserClaimsInIdToken = true,
+                
+                // after login the identity server redirects to a consent page ... to make user aware of the claims 
+                // that the application can access .. but if we choose not to show that screen we need to set to false
                 RequireConsent = false
             }
         };
