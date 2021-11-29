@@ -32,6 +32,8 @@ namespace ConfArch.Web
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
                     assembly => assembly.MigrationsAssembly(typeof(ConfArchDbContext).Assembly.FullName)));
 
+            services.AddScoped<IUserRepository, UserRepository>();
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
         
